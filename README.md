@@ -6,7 +6,6 @@
 > A template for an AWS based serverless api. This utilizes lambda, api-gateway, WAFv2 and other various services to build a scalable and highly-available api. Deployment of all infrastructure fully automated via serverless framework :)
 
 ## Architecture
-<div>
 Below is a single region deployment example. All resources here are automatically provisioned and configured via serverless framework and deployed to the configured region.
 <br>
 <img src="./docs/single-region.png" width="350" title="Single Region Deployment">
@@ -14,7 +13,6 @@ Below is a single region deployment example. All resources here are automaticall
 Below is a multi-region deployment for high availability in the event of an AWS region failure. This also reduces geographic latency to each region deployed. To achieve this active-active behavior we must manually configure a `route53 zone` & `api gateway custom domains`. You then apply 2 `latency based` routing policies to point at each api gateaway via `A record`. Then attach health-checks to each policy to ensure that the services are healthy in that region.
 <br>
 <img src="./docs/multi-region.png" width="350" title="Single Region Deployment">
-</div>
 
 ## Adding new lambdas
 Adding lambdas is fairly straight forward. Simply copy one of the lambda folders inside of `/src/lambdas/` and modify the handler code as needed. Note that the handler must return the callback and the data should be in a `json` format. Once that is complete open `serverless.yml` and navigate to the `functions:` section. This is where we specify the file to use in that lambda as well as how it connects to api-gateway. 
