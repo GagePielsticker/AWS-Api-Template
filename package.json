@@ -1,18 +1,17 @@
 {
-  "name": "serverless-api-template",
+  "name": "aws-api-template",
   "version": "1.0.0",
-  "description": "A template for an AWS serverless api.",
+  "description": "A template for an AWS based serverless api. This utilizes lambda, api-gateway, WAFv2 and other various services to build a scalable and highly-available api. Deployment of all infrastructure fully automated via serverless framework :)",
   "main": "index.js",
   "scripts": {
     "dev": "serverless offline",
-    
     "test": "jest --coverage && coveralls < coverage/lcov.info",
     "build": "serverless package",
     "deploy": "serverless deploy --stage dev --region us-east-1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GagePielsticker/aws-api-template.git"
+    "url": "git+https://github.com/GagePielsticker/AWS-Api-Template.git"
   },
   "keywords": [
     "aws",
@@ -22,12 +21,12 @@
     "template",
     "boilerplate"
   ],
-  "author": "Gage Pielsticker",
+  "author": "James Gage Pielsticker",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/GagePielsticker/aws-api-template/issues"
+    "url": "https://github.com/GagePielsticker/AWS-Api-Template/issues"
   },
-  "homepage": "https://github.com/GagePielsticker/aws-api-template#readme",
+  "homepage": "https://github.com/GagePielsticker/AWS-Api-Template#readme",
   "devDependencies": {
     "coveralls": "^3.1.1",
     "jest": "^29.5.0",
