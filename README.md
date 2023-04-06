@@ -40,7 +40,7 @@ functions:
 For more documentation on how its configured, visit [HERE](https://www.serverless.com/framework/docs/providers/aws/guide/functions).
 
 ## Adding Environment Variables
-Environment variables to the deployment can be added via `serverless.yml`. An example is as follow:
+Environment variables can be added to our lambdas via `serverless.yml` under the `provider:`. An example is as follow:
 ```yaml
 provider:
   environment:
