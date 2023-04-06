@@ -22,8 +22,8 @@ provider:
     project: ${self:service}
 
   deploymentBucket:
-    name: ${self:service}-${self:provider.stage}-deployment
-  
+    name: ${self:service}-${self:provider.stage}-deployment-641 ##MUST BE UNIQUE IN EACH REGION
+    
   ### Lambda Settings
   runtime: nodejs18.x #node version
   memorySize: 1024 # optional, in MB, default is 1024
@@ -39,10 +39,10 @@ provider:
   apiGateway:
     description: Api Gateway for ${self:service}-${self:provider.stage}
     apiKeys:
-      - private_key: # Used to tie key to usage plan
+      - privatekey: # Used to tie key to usage plan
           - ${self:service}-${self:provider.stage}-KEY
     usagePlan:
-      - private_key: # Used to tie key to usage plan. Key will abide by the following
+      - privatekey: # Used to tie key to usage plan. Key will abide by the following
           quota:
             limit: 5000 #maximum 5000 request per month, refreshes on 2nd day
             offset: 2
@@ -56,6 +56,12 @@ custom:
   associateWaf:
     name: ${self:service}-${self:provider.stage}-WAF
     version: V2 #(optional) Regional | V2
+  deploymentBucket:
+    blockPublicAccess: true
+    tags:
+      - Key: project
+        Value: ${self:service}
+
 
 ###################
 # Lambda Functions to provision
@@ -81,19 +87,21 @@ functions:
       - http:
           method: get
           path: hello
+          private: true #require api key
           cors:
             origin: '*'
 
   bye:
     handler: src/lambdas/bye/handler.handler
     maximumRetryAttempts: 1
-    package: # Only package code relevant to this specific lambda
+    package:
       patterns:
         - src/lambdas/bye/**
     events:
       - http:
           method: get
           path: bye
+          private: true
           cors:
             origin: '*'
 
@@ -102,51 +110,66 @@ functions:
 ###################
 resources:
   Resources:
-    # S3 Bucket for deployment
-    deploymentBucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        Tags:
-          project: ${self:service}
-        BucketName: ${self:service}-${self:provider.stage}-deployment
-
     # WAF for our api gateway
     wafv2:
       Type: AWS::WAFv2::WebACL
       Properties:
-        DefaultAction: Allow
+        DefaultAction:
+          Allow: {}
         Name: ${self:service}-${self:provider.stage}-WAF
+        Scope: REGIONAL
         VisibilityConfig:
-          CloudWatchMetricsEnabled: false
-          MetricName: ${self:service}-${self:provider.stage}-WAF
-          SampledRequestsEnabled: false
+          CloudWatchMetricsEnabled: False
+          MetricName: ${self:service}-${self:provider.stage}
+          SampledRequestsEnabled: False
         Tags:
-          project: ${self:service}
+          - Key: project
+            Value: ${self:service}
         Rules: 
-          - Action: Block
-            Name: Core-Rule-Set
+          - Name: Core-Rule-Set
+            OverrideAction:
+              None: {}
             Priority: 0
+            VisibilityConfig:
+              CloudWatchMetricsEnabled: False
+              MetricName: ${self:service}-${self:provider.stage}-WAF
+              SampledRequestsEnabled: False
             Statement:
               ManagedRuleGroupStatement:
                 VendorName: AWS
                 Name: AWSManagedRulesCommonRuleSet
-          - Action: Block
-            Name: Known-Bad-Input
+          - Name: Known-Bad-Input
+            OverrideAction:
+              None: {}
             Priority: 1
+            VisibilityConfig:
+              CloudWatchMetricsEnabled: False
+              MetricName: ${self:service}-${self:provider.stage}-WAF
+              SampledRequestsEnabled: False
             Statement:
               ManagedRuleGroupStatement:
                 VendorName: AWS
                 Name: AWSManagedRulesKnownBadInputsRuleSet
-          - Action: Block
-            Name: Anonymous-IP
+          - Name: Anonymous-IP
+            OverrideAction:
+              None: {}
             Priority: 2
+            VisibilityConfig:
+              CloudWatchMetricsEnabled: False
+              MetricName: ${self:service}-${self:provider.stage}-WAF
+              SampledRequestsEnabled: False
             Statement:
               ManagedRuleGroupStatement:
                 VendorName: AWS
                 Name: AWSManagedRulesAnonymousIpList
-          - Action: Block
-            Name: IP-Reputation
+          - Name: IP-Reputation
+            OverrideAction:
+              None: {}
             Priority: 3
+            VisibilityConfig:
+              CloudWatchMetricsEnabled: False
+              MetricName: ${self:service}-${self:provider.stage}-WAF
+              SampledRequestsEnabled: False
             Statement:
               ManagedRuleGroupStatement:
                 VendorName: AWS

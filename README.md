@@ -66,6 +66,9 @@ To deploy the application to AWS you will first need to install the [AWS CLI](ht
 2. Ensure all your unit test are passing with `npm test`
 3. Run `npm deploy` which will use the default of stage `dev` and region `us-east-1`. If you wish to manually configure the stage and region, you can do so by modifying the `package.json` script or alternatively running `serverless deploy --stage dev --region us-east-1` manually with your respective changes to that commands parameters.
 
+**IMPORTANT** : Due to the universal nature of s3, the deployment may fail with a "bucket already exist" error. This is because s3 buckets must have unique names _per region_. To resolve this ensure your service name is unique to your project or modify the deployment bucket name in the `serverless.yml` 
+
+**IMPORTANT** : Upon first deployment, the script may nto be able to attach the WAF to the API-Gateway. Simply rerun the deployment script and it should attach now that its created.
 
 ## Dev Dependencies
 - jest
