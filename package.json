@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --coverage",
     "dev": "serverless offline",
-    "package": "serverless package"
+    "build": "serverless package"
   },
   "repository": {
     "type": "git",

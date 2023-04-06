@@ -1,6 +1,12 @@
-# serverless-api-template
- A template for an AWS serverless api.
+![Known Vulnerabilities](https://snyk.io/test/github/gagepielsticker/aws-api-template/badge.svg) 
+![CircleCI](https://dl.circleci.com/status-badge/img/gh/GagePielsticker/aws-api-template/tree/main.svg?style=svg)
 
+# AWS Serverless API
+A template for an AWS serverless api. This utilizes lambda, api-gateway, WAFv2 and various services to build a scalable and highly-available api service.
 
-# Why Cloudfront in front of API-Gateway?
-This allows us to enable AWS Shield ddos protection.
+## Preface
+> Insert Preface Here
+
+## Deployed Architecture
+
+## Dependencies
