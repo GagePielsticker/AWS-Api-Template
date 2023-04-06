@@ -4,9 +4,11 @@
   "description": "A template for an AWS serverless api.",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage && coveralls < coverage/lcov.info",
     "dev": "serverless offline",
-    "build": "serverless package"
+    
+    "test": "jest --coverage && coveralls < coverage/lcov.info",
+    "build": "serverless package",
+    "deploy": "serverless deploy --stage dev --region us-east-1"
   },
   "repository": {
     "type": "git",

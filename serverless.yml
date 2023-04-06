@@ -13,7 +13,6 @@ provider:
 
   ### General Deployment Settings
   name: aws
-  runtime: nodejs18.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
 
@@ -26,14 +25,16 @@ provider:
     name: ${self:service}-${self:provider.stage}-deployment
   
   ### Lambda Settings
+  runtime: nodejs18.x #node version
   memorySize: 1024 # optional, in MB, default is 1024
   timeout: 20 # optional, in seconds, default is 6
-  architecture: arm64
+  architecture: arm64 #architecture to run the lambda (graviton2)
+  logRetentionInDays: 7 #time in days to keep lambda logs in cloudwatch
   tracing: # X-Ray tracing on lambda & apigateway
     lambda: true
     apiGateway: true
 
-  ### API Gateway creation/Settings
+  ### API Gateway creation/Settings & usage plan
   endpointType: EDGE
   apiGateway:
     description: Api Gateway for ${self:service}-${self:provider.stage}
@@ -41,14 +42,14 @@ provider:
       - private_key: # Used to tie key to usage plan
           - ${self:service}-${self:provider.stage}-KEY
     usagePlan:
-      - private_key: # Used to tie key to usage plan
+      - private_key: # Used to tie key to usage plan. Key will abide by the following
           quota:
-            limit: 5000
+            limit: 5000 #maximum 5000 request per month, refreshes on 2nd day
             offset: 2
             period: MONTH
           throttle:
-            burstLimit: 200
-            rateLimit: 100
+            burstLimit: 200 #maximum number of concurrent requests that API gateway will serve at any given point
+            rateLimit: 100 #request per second limit
 
 # attach waf to api gateway
 custom:
@@ -65,14 +66,13 @@ package:
   patterns:
     - '!**/*'
     - node_modules/**
-    - src/utils/**
+    - src/utils/** #Global lambda utils
     - package.json
 
 # Actual lambda functions
 functions:
   hello:
     handler: src/lambdas/hello/handler.handler #fileName.exportName in code
-    logRetentionInDays: 7 #Cloudwatch Log Retention in days
     maximumRetryAttempts: 1 #Retry attempts by lambda on failure
     package: # Only package code relevant to this specific lambda
       patterns:
@@ -86,7 +86,6 @@ functions:
 
   bye:
     handler: src/lambdas/bye/handler.handler
-    logRetentionInDays: 7
     maximumRetryAttempts: 1
     package: # Only package code relevant to this specific lambda
       patterns:
@@ -95,7 +94,8 @@ functions:
       - http:
           method: get
           path: bye
-          cors: true
+          cors:
+            origin: '*'
 
 ###################
 # Additional Resource Provisioning
