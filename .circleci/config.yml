@@ -13,4 +13,5 @@ orbs:
         - coveralls/upload
 workflows:
   build_and_test:
-    - build
+    jobs:
+      - build
