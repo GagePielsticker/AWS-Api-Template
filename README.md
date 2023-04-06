@@ -1,6 +1,6 @@
 # AWS Serverless API
-![Known Vulnerabilities](https://snyk.io/test/github/gagepielsticker/aws-api-template/badge.svg) 
-![CircleCI](https://dl.circleci.com/status-badge/img/gh/GagePielsticker/aws-api-template/tree/main.svg?style=svg)
+![Known Vulnerabilities](https://snyk.io/test/github/gagepielsticker/AWS-Api-Template/badge.svg) 
+![CircleCI](https://dl.circleci.com/status-badge/img/gh/GagePielsticker/AWS-Api-Template/tree/main.svg?style=svg)
 [![Coverage Status](https://coveralls.io/repos/github/GagePielsticker/aws-api-template/badge.svg?branch=main)](https://coveralls.io/github/GagePielsticker/aws-api-template?branch=main)
 
 > A template for an AWS based serverless api. This utilizes lambda, api-gateway, WAFv2 and other various services to build a scalable and highly-available api. Deployment of all infrastructure fully automated via serverless framework :)
