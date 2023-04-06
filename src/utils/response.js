@@ -4,7 +4,7 @@ function formatResponse (data) {
 
   if (!data || typeof data !== 'object') {
     data = 'Invalid Server Response.'
-    statusCode = 500
+    statusCode = 400
   } else statusCode = 200
 
   return {

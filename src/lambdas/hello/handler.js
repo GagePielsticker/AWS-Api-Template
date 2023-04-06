@@ -2,15 +2,14 @@
 const { formatResponse } = require('../../utils/response')
 
 /* Invoke handler */
-/* Note: Lambda qualifies 'error' (500 code) from when a lambda exits before processed full request */
-exports.handler = (event) => {
-  const params = event.queryStringParameters
+exports.handler = (event, context, callback) => {
+  const params = event?.queryStringParameters
 
-  console.log(`Lambda Invoked with params:\n${JSON.stringify(params, null, 4)}`)
+  console.log(`Lambda Invoked with params:\n${params ? JSON.stringify(params, null, 4) : 'NONE'}`)
 
   const data = {
     hello: ':)'
   }
 
-  return formatResponse(data)
+  return callback(null, formatResponse(data))
 }

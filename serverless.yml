@@ -7,6 +7,7 @@ service: api-service
 plugins:
   - serverless-offline
   - serverless-deployment-bucket
+  - serverless-associate-waf
 
 provider:
 
@@ -33,7 +34,7 @@ provider:
     apiGateway: true
 
   ### API Gateway creation/Settings
-  endpointType: REGIONAL
+  endpointType: EDGE
   apiGateway:
     description: Api Gateway for ${self:service}-${self:provider.stage}
     apiKeys:
@@ -48,6 +49,12 @@ provider:
           throttle:
             burstLimit: 200
             rateLimit: 100
+
+# attach waf to api gateway
+custom:
+  associateWaf:
+    name: ${self:service}-${self:provider.stage}-WAF
+    version: V2 #(optional) Regional | V2
 
 ###################
 # Lambda Functions to provision
@@ -66,6 +73,7 @@ functions:
   hello:
     handler: src/lambdas/hello/handler.handler #fileName.exportName in code
     logRetentionInDays: 7 #Cloudwatch Log Retention in days
+    maximumRetryAttempts: 1 #Retry attempts by lambda on failure
     package: # Only package code relevant to this specific lambda
       patterns:
         - src/lambdas/hello/**
@@ -78,7 +86,8 @@ functions:
 
   bye:
     handler: src/lambdas/bye/handler.handler
-    logRetentionInDays: 7 
+    logRetentionInDays: 7
+    maximumRetryAttempts: 1
     package: # Only package code relevant to this specific lambda
       patterns:
         - src/lambdas/bye/**
@@ -97,4 +106,48 @@ resources:
     deploymentBucket:
       Type: AWS::S3::Bucket
       Properties:
+        Tags:
+          project: ${self:service}
         BucketName: ${self:service}-${self:provider.stage}-deployment
+
+    # WAF for our api gateway
+    wafv2:
+      Type: AWS::WAFv2::WebACL
+      Properties:
+        DefaultAction: Allow
+        Name: ${self:service}-${self:provider.stage}-WAF
+        VisibilityConfig:
+          CloudWatchMetricsEnabled: false
+          MetricName: ${self:service}-${self:provider.stage}-WAF
+          SampledRequestsEnabled: false
+        Tags:
+          project: ${self:service}
+        Rules: 
+          - Action: Block
+            Name: Core-Rule-Set
+            Priority: 0
+            Statement:
+              ManagedRuleGroupStatement:
+                VendorName: AWS
+                Name: AWSManagedRulesCommonRuleSet
+          - Action: Block
+            Name: Known-Bad-Input
+            Priority: 1
+            Statement:
+              ManagedRuleGroupStatement:
+                VendorName: AWS
+                Name: AWSManagedRulesKnownBadInputsRuleSet
+          - Action: Block
+            Name: Anonymous-IP
+            Priority: 2
+            Statement:
+              ManagedRuleGroupStatement:
+                VendorName: AWS
+                Name: AWSManagedRulesAnonymousIpList
+          - Action: Block
+            Name: IP-Reputation
+            Priority: 3
+            Statement:
+              ManagedRuleGroupStatement:
+                VendorName: AWS
+                Name: AWSManagedRulesAmazonIpReputationList

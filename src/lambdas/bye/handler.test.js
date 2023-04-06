@@ -1,12 +1,11 @@
 let {handler} = require('./handler')
+process.env.AWS_REGION = 'us-east-1'
 
 test('Testing bye handler 200 response', () => {
 
-    let result = handler({
-        queryStringParameters: {
-            test: 1
-        }
-    })
+    let result = handler({}, null, processResult)
 
-    expect(result.statusCode).toBe(200)
+    function processResult(err, data) {
+        expect(data.statusCode).toBe(200)
+    }
 })
