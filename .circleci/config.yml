@@ -13,14 +13,14 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build_and_test: # this can be any name you choose
-        executor: node/default # use the default executor defined within the orb
-        steps:
-          - checkout
-          - node/install-packages:
-              pkg-manager: npm
-          - run:
-              command: npm test
-              name: Run tests
-          - run:
-              command: npm run build
-              name: Build app
+          executor: node/default # use the default executor defined within the orb
+          steps:
+            - checkout
+            - node/install-packages:
+                pkg-manager: npm
+            - run:
+                command: npm test
+                name: Run tests
+            - run:
+                command: npm run build
+                name: Build app
