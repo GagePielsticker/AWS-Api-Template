@@ -2,15 +2,15 @@
 ![CircleCI](https://dl.circleci.com/status-badge/img/gh/GagePielsticker/aws-api-template/tree/main.svg?style=svg)
 
 # AWS Serverless API
-A template for an AWS serverless api. This utilizes lambda, api-gateway, WAFv2 and various services to build a scalable and highly-available api service.
-
-## Preface
-> Insert Preface Here
+A template for an AWS based serverless api. This utilizes lambda, api-gateway, WAFv2 and other various services to build a scalable and highly-available api. Deployment of all infrastructure fully automated via serverless framework :)
 
 ## Architecture
 xxxx
 
 ## Adding new lambdas/endpoints
+xxxx
+
+## Deployment
 xxxx
 
 ## Dev Dependencies

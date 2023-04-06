@@ -4,7 +4,7 @@
   "description": "A template for an AWS serverless api.",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest --coverage && coveralls < coverage/lcov.info",
     "dev": "serverless offline",
     "build": "serverless package"
   },
