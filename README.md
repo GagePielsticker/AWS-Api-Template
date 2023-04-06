@@ -14,6 +14,8 @@ Below is a multi-region deployment for high availability in the event of an AWS 
 <br>
 <img src="./docs/multi-region.png" width="350" title="Single Region Deployment">
 
+Alternatively you could setup a cloudfront distribution with an origin group that contains both api-gateways that fails over on 4xx-5xx. This active-passive pattern would also allow multi-region failover without the need of route53 or a custom domain.
+
 ## Adding new lambdas
 Adding lambdas is fairly straight forward. Simply copy one of the lambda folders inside of `/src/lambdas/` and modify the handler code as needed. Note that the handler must return the callback and the data should be in a `json` format. Once that is complete open `serverless.yml` and navigate to the `functions:` section. This is where we specify the file to use in that lambda as well as how it connects to api-gateway. 
 
