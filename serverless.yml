@@ -1,0 +1,100 @@
+service: api-service
+
+###################
+# General Configuration
+###################
+
+plugins:
+  - serverless-offline
+  - serverless-deployment-bucket
+
+provider:
+
+  ### General Deployment Settings
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+
+  stackTags:
+    project: ${self:service}
+  tags:
+    project: ${self:service}
+
+  deploymentBucket:
+    name: ${self:service}-${self:provider.stage}-deployment
+  
+  ### Lambda Settings
+  memorySize: 1024 # optional, in MB, default is 1024
+  timeout: 20 # optional, in seconds, default is 6
+  architecture: arm64
+  tracing: # X-Ray tracing on lambda & apigateway
+    lambda: true
+    apiGateway: true
+
+  ### API Gateway creation/Settings
+  endpointType: REGIONAL
+  apiGateway:
+    description: Api Gateway for ${self:service}-${self:provider.stage}
+    apiKeys:
+      - private_key: # Used to tie key to usage plan
+          - ${self:service}-${self:provider.stage}-KEY
+    usagePlan:
+      - private_key: # Used to tie key to usage plan
+          quota:
+            limit: 5000
+            offset: 2
+            period: MONTH
+          throttle:
+            burstLimit: 200
+            rateLimit: 100
+
+###################
+# Lambda Functions to provision
+###################
+# Lambda Packaging Options
+package:
+  individually: true
+  patterns:
+    - '!**/*'
+    - node_modules/**
+    - src/utils/**
+    - package.json
+
+# Actual lambda functions
+functions:
+  hello:
+    handler: src/lambdas/hello/handler.handler #fileName.exportName in code
+    logRetentionInDays: 7 #Cloudwatch Log Retention in days
+    package: # Only package code relevant to this specific lambda
+      patterns:
+        - src/lambdas/hello/**
+    events: #API Gateway integration etc
+      - http:
+          method: get
+          path: hello
+          cors:
+            origin: '*'
+
+  bye:
+    handler: src/lambdas/bye/handler.handler
+    logRetentionInDays: 7 
+    package: # Only package code relevant to this specific lambda
+      patterns:
+        - src/lambdas/bye/**
+    events:
+      - http:
+          method: get
+          path: bye
+          cors: true
+
+###################
+# Additional Resource Provisioning
+###################
+resources:
+  Resources:
+    # S3 Bucket for deployment
+    deploymentBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:service}-${self:provider.stage}-deployment

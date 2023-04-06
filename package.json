@@ -1,0 +1,36 @@
+{
+  "name": "serverless-api-template",
+  "version": "1.0.0",
+  "description": "A template for an AWS serverless api.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "dev": "serverless offline",
+    "package": "serverless package"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GagePielsticker/aws-api-template.git"
+  },
+  "keywords": [
+    "aws",
+    "serverless",
+    "api",
+    "service",
+    "template",
+    "boilerplate"
+  ],
+  "author": "Gage Pielsticker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GagePielsticker/aws-api-template/issues"
+  },
+  "homepage": "https://github.com/GagePielsticker/aws-api-template#readme",
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "serverless": "^3.30.0",
+    "serverless-deployment-bucket": "^1.6.0",
+    "serverless-offline": "^12.0.4",
+    "standard": "^17.0.0"
+  }
+}
