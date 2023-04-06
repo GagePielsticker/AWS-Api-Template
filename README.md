@@ -28,11 +28,12 @@ functions:
     package: # Only package code relevant to this specific lambda
       patterns:
         - src/lambdas/hello/**
-    events: #API Gateway integration
+    events: #API Gateway integration etc
       - http:
           method: get
           path: hello
-          cors:
+          private: true #require api key
+          cors: #cors settings
             origin: '*'
 ```
 
