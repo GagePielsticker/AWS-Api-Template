@@ -8,11 +8,11 @@
 ## Architecture
 <div>
 Below is a single region deployment example. All resources here are automatically provisioned and configured via serverless framework and deployed to the configured region.
-
+<br>
 <img src="./docs/single-region.png" width="350" title="Single Region Deployment">
-
+<br>
 Below is a multi-region deployment for high availability in the event of an AWS region failure. This also reduces geographic latency to each region deployed. To achieve this active-active behavior we must manually configure a `route53 zone` & `api gateway custom domains`. You then apply 2 `latency based` routing policies to point at each api gateaway via `A record`. Then attach health-checks to each policy to ensure that the services are healthy in that region.
-
+<br>
 <img src="./docs/multi-region.png" width="350" title="Single Region Deployment">
 </div>
 
