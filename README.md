@@ -7,6 +7,19 @@ A template for an AWS serverless api. This utilizes lambda, api-gateway, WAFv2 a
 ## Preface
 > Insert Preface Here
 
-## Deployed Architecture
+## Architecture
+xxxx
 
-## Dependencies
+## Adding new lambdas/endpoints
+xxxx
+
+## Dev Dependencies
+- jest
+- serverless
+- serverless-associate-waf
+- serverless-deployment-bucket
+- serverless-offline
+- standard
+
+## Contributing
+Find the contribution document [HERE](/CONTRIBUTING.md) if you wish to work on the repo!
