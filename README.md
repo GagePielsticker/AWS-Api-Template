@@ -5,6 +5,17 @@
 
 > A template for starting an AWS based serverless api. This utilizes lambda, api-gateway, WAFv2 and other various services to build a scalable and highly-available api. Deployment of all infrastructure fully automated via serverless framework :)
 
+- [AWS Serverless API Template](#aws-serverless-api-template)
+  - [Architecture](#architecture)
+  - [Adding new lambdas](#adding-new-lambdas)
+  - [Adding Environment Variables](#adding-environment-variables)
+  - [Adding Databasing \& Caching](#adding-databasing--caching)
+  - [Configuring API Gateway \& Limits](#configuring-api-gateway--limits)
+  - [Testing](#testing)
+  - [Deployment](#deployment)
+  - [Dev Dependencies](#dev-dependencies)
+  - [Contributing](#contributing)
+
 ## Architecture
 Below is a single region deployment example. All resources here are automatically provisioned and configured via serverless framework and deployed to the configured region.
 <br>
@@ -46,7 +57,12 @@ provider:
   environment:
     MY_SECRET: hi there :)
 ```
-This will be accessible in the lambda via `process.env.MY_SECRET`.
+This will be accessible in the lambda via `process.env.MY_SECRET`. There are defaultly some environment variables accessible from AWS such as `process.env.AWS_REGION` for the current region
+
+**Note**: Sensitive secrets should be stored via [Secret Manager](https://aws.amazon.com/secrets-manager/) which should be manually configured by you. To request secrets and data from the service you can utilize the [AWS SDK for JS](https://www.npmjs.com/package/aws-sdk) and follow this [example](https://www.internetkatta.com/how-to-use-secrets-manager-in-aws-lambda-node-js).
+
+## Adding Databasing & Caching
+There are a few options for caching in databasing that AWS provides. However, as this repo acts primarily as a starting template for a restful api's I will not go to in depth on this as each service has its own use case. If you are curious on my recommendations though feel free to open an issue and ask!
 
 ## Configuring API Gateway & Limits
 By default, our api-gateway service is secured and will automatically provisioned an api key attached to a `usage plan`. A usage plan is a set of limits of which the api key must abide such as a `rate limit`, `burst limit`, and `quota`. You can modify the limits of this usage plan via the `serverless.yml` under the `apiGateway:` section. 
