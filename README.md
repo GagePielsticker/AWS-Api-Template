@@ -1,9 +1,9 @@
-# AWS Serverless API
+# AWS Serverless API Template
 ![Known Vulnerabilities](https://snyk.io/test/github/gagepielsticker/AWS-Api-Template/badge.svg) 
 ![CircleCI](https://dl.circleci.com/status-badge/img/gh/GagePielsticker/AWS-Api-Template/tree/main.svg?style=svg)
 [![Coverage Status](https://coveralls.io/repos/github/GagePielsticker/aws-api-template/badge.svg?branch=main)](https://coveralls.io/github/GagePielsticker/aws-api-template?branch=main)
 
-> A template for an AWS based serverless api. This utilizes lambda, api-gateway, WAFv2 and other various services to build a scalable and highly-available api. Deployment of all infrastructure fully automated via serverless framework :)
+> A template for starting an AWS based serverless api. This utilizes lambda, api-gateway, WAFv2 and other various services to build a scalable and highly-available api. Deployment of all infrastructure fully automated via serverless framework :)
 
 ## Architecture
 Below is a single region deployment example. All resources here are automatically provisioned and configured via serverless framework and deployed to the configured region.
@@ -38,6 +38,15 @@ functions:
 ```
 
 For more documentation on how its configured, visit [HERE](https://www.serverless.com/framework/docs/providers/aws/guide/functions).
+
+## Adding Environment Variables
+Environment variables to the deployment can be added via `serverless.yml`. An example is as follow:
+```yaml
+provider:
+  environment:
+    MY_SECRET: hi there :)
+```
+This will be accessible in the lambda via `process.env.MY_SECRET`.
 
 ## Configuring API Gateway & Limits
 By default, our api-gateway service is secured and will automatically provisioned an api key attached to a `usage plan`. A usage plan is a set of limits of which the api key must abide such as a `rate limit`, `burst limit`, and `quota`. You can modify the limits of this usage plan via the `serverless.yml` under the `apiGateway:` section. 
